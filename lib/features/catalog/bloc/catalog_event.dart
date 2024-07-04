@@ -9,3 +9,12 @@ class LoadCatalog extends CatalogEvent {
   @override
   List<Object?> get props => [completer];
 }
+
+class AddCatalogItems extends CatalogEvent {
+  final int startIndex;
+  final int endIndex;
+
+  AddCatalogItems(this.startIndex, this.endIndex);
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}

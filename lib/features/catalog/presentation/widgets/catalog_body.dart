@@ -16,10 +16,29 @@ class CatalogBody extends StatefulWidget {
 
 class _CatalogBodyState extends State<CatalogBody> {
   final _bloc = CatalogBloc();
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     _bloc.add(LoadCatalog());
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 600) {
+        final state = _bloc.state;
+        if (state is CatalogLoaded) {
+          final currentItemCount = state.items.length;
+          print('addCatalogItems');
+          _bloc.add(AddCatalogItems(currentItemCount, currentItemCount + 19));
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,12 +55,14 @@ class _CatalogBodyState extends State<CatalogBody> {
           if (state is CatalogLoaded) {
             final items = state.items;
             return GridView.custom(
+              controller: _scrollController,
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200.w,
-                  crossAxisSpacing: 10.w,
-                  childAspectRatio: 0.65,
-                  mainAxisSpacing: 10.h),
+                maxCrossAxisExtent: 200.w,
+                crossAxisSpacing: 10.w,
+                childAspectRatio: 0.65,
+                mainAxisSpacing: 10.h,
+              ),
               childrenDelegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return ProductWidget(items[index]);
@@ -52,16 +73,18 @@ class _CatalogBodyState extends State<CatalogBody> {
           }
           if (state is CatalogLoadingFailure) {
             return Center(
-                child: Column(
-              children: [
-                Text(state.error),
-                TextButton(
+              child: Column(
+                children: [
+                  Text(state.error),
+                  TextButton(
                     onPressed: () {
                       _bloc.add(LoadCatalog());
                     },
-                    child: Text('Reload'))
-              ],
-            ));
+                    child: Text('Reload'),
+                  ),
+                ],
+              ),
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }

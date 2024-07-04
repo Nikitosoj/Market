@@ -13,13 +13,15 @@ part 'catalog_state.dart';
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<LoadCatalog>(getCatalog);
+    on<AddCatalogItems>(addItems);
   }
   void getCatalog(LoadCatalog event, Emitter<CatalogState> emit) async {
     try {
       if (state is! CatalogLoaded) {
         emit(CatalogLoading());
       }
-      final items = await getCatalogList().timeout(const Duration(seconds: 5));
+      final items =
+          await getCatalogList(0, 19).timeout(const Duration(seconds: 5));
       items.sort((a, b) => b.rating.compareTo(a.rating));
       emit(CatalogLoaded(items: items));
     } on TimeoutException {
@@ -29,6 +31,22 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       emit(CatalogLoadingFailure(e.toString()));
     } finally {
       event.completer?.complete();
+    }
+  }
+
+  void addItems(AddCatalogItems event, Emitter<CatalogState> emit) async {
+    if (state is CatalogLoaded) {
+      final currentState = state as CatalogLoaded;
+      final currentItems = List<Product>.from(currentState.items);
+      try {
+        final newItems = await getCatalogList(event.startIndex, event.endIndex)
+            .timeout(const Duration(seconds: 5));
+        newItems.sort((a, b) => b.rating.compareTo(a.rating));
+        final updatedItems = currentItems + newItems;
+        emit(CatalogLoaded(items: updatedItems));
+      } catch (e) {
+        emit(CatalogLoadingFailure(e.toString()));
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ class Product {
   final String type;
   final String subType;
   final String description;
-  final double price;
+  final int price;
   final double rating;
   final List<String> sizes;
   final String sellerId;
@@ -32,7 +32,7 @@ class Product {
       type: map['type'],
       subType: map['sub_type'],
       description: map['description'],
-      price: (map['price'] as num).toDouble(),
+      price: map['price'],
       sizes: sizes,
       sellerId: map['seller_id'],
       rating: ((map['rating'] as num).toDouble()),

@@ -1,9 +1,10 @@
 import 'package:style_hub/core/models/product.dart';
 import 'package:style_hub/main.dart';
 
-Future<List<Product>> getCatalogList() async {
+Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
   // Получаем список продуктов
-  final productResult = await supabase.from('Product').select().range(0,19);
+  final productResult =
+      await supabase.from('Product').select().range(startIndex, endIndex);
   final products = List<Map<String, dynamic>>.from(productResult);
 
   // Создаем пустой список для хранения продуктов
