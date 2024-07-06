@@ -34,10 +34,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     }
   }
 
+// объеденить это красиво
   void addItems(AddCatalogItems event, Emitter<CatalogState> emit) async {
     if (state is CatalogLoaded) {
       final currentState = state as CatalogLoaded;
       final currentItems = List<Product>.from(currentState.items);
+      emit(LoadingNextPage(items: currentItems));
       try {
         final newItems = await getCatalogList(event.startIndex, event.endIndex)
             .timeout(const Duration(seconds: 5));

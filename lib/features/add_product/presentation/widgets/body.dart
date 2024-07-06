@@ -67,51 +67,55 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<AuthNotifier>(context, listen: false).user!;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('name'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter name', controller: _nameController),
-            SizedBox(height: 16.0.h),
-            const Text('type'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter type', controller: _typeController),
-            SizedBox(height: 16.0.h),
-            const Text('sub-type'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter sub-type', controller: _subTypeController),
-            SizedBox(height: 16.0.h),
-            const Text('description'),
-            SizedBox(height: 5.h),
-            CustomForm(
-                label: 'Enter description', controller: _descriptionController),
-            SizedBox(height: 16.0.h),
-            const Text('price'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter price', controller: _priceController),
-            SizedBox(height: 16.0.h),
-            const Text('size'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter size', controller: _sizeController),
-            SizedBox(height: 16.0.h),
-            const Text('rating'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter rating', controller: _ratingController),
-            SizedBox(height: 16.0.h),
-            const Text('stock'),
-            SizedBox(height: 5.h),
-            CustomForm(label: 'Enter stock', controller: _stockController),
-            SizedBox(height: 16.0.h),
-            TextButton(
-                onPressed: () {
-                  addProduct(user.id);
-                },
-                child: const Text('Add product'))
-          ],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('name'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter name', controller: _nameController),
+              SizedBox(height: 16.0.h),
+              const Text('type'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter type', controller: _typeController),
+              SizedBox(height: 16.0.h),
+              const Text('sub-type'),
+              SizedBox(height: 5.h),
+              CustomForm(
+                  hint: 'Enter sub-type', controller: _subTypeController),
+              SizedBox(height: 16.0.h),
+              const Text('description'),
+              SizedBox(height: 5.h),
+              CustomForm(
+                  hint: 'Enter description',
+                  controller: _descriptionController),
+              SizedBox(height: 16.0.h),
+              const Text('price'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter price', controller: _priceController),
+              SizedBox(height: 16.0.h),
+              const Text('size'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter size', controller: _sizeController),
+              SizedBox(height: 16.0.h),
+              const Text('rating'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter rating', controller: _ratingController),
+              SizedBox(height: 16.0.h),
+              const Text('stock'),
+              SizedBox(height: 5.h),
+              CustomForm(hint: 'Enter stock', controller: _stockController),
+              SizedBox(height: 16.0.h),
+              TextButton(
+                  onPressed: () {
+                    addProduct(user.id);
+                  },
+                  child: const Text('Add product'))
+            ],
+          ),
         ),
       ),
     );

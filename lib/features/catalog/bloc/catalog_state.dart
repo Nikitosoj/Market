@@ -27,3 +27,11 @@ class CatalogLoadingFailure extends CatalogState {
   @override
   List<Object?> get props => [error];
 }
+
+class LoadingNextPage extends CatalogState {
+  final List<Product> items;
+  LoadingNextPage({required this.items});
+
+  @override
+  List<Object?> get props => [items];
+}

@@ -8,11 +8,9 @@ Future<User?> checkUserData(String email, String password) async {
         .select()
         .eq('email', email)
         .eq('encrypted_password', password);
-    print('check user data = $response');
     if (response.isEmpty) {
       return null;
     } else {
-      print('start getByemail');
       return await User().getByEmail(email);
     }
   } catch (e) {

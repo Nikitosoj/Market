@@ -28,7 +28,6 @@ class _CatalogBodyState extends State<CatalogBody> {
         final state = _bloc.state;
         if (state is CatalogLoaded) {
           final currentItemCount = state.items.length;
-          print('addCatalogItems');
           _bloc.add(AddCatalogItems(currentItemCount, currentItemCount + 19));
         }
       }
@@ -52,8 +51,8 @@ class _CatalogBodyState extends State<CatalogBody> {
       child: BlocBuilder<CatalogBloc, CatalogState>(
         bloc: _bloc,
         builder: (context, state) {
-          if (state is CatalogLoaded) {
-            final items = state.items;
+          if ((state is CatalogLoaded) || (state is LoadingNextPage)) {
+            final items = (state as dynamic).items;
             return GridView.custom(
               controller: _scrollController,
               padding: EdgeInsets.symmetric(horizontal: 20.w),

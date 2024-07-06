@@ -63,7 +63,9 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
           .insert({'product_id': productId, 'size_id': sizeId});
       context.go('/catalog');
     } catch (e) {
-      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     }
   }
 }

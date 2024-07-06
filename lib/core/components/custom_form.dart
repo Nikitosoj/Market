@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class CustomForm extends StatelessWidget {
   const CustomForm(
       {super.key,
-      required this.label,
+      this.label,
+      this.hint,
+      this.textStyle = const TextStyle(),
       required this.controller,
       this.obscure = false});
-  final String label;
+  final String? label;
+  final String? hint;
+  final TextStyle textStyle;
   final TextEditingController controller;
   final bool obscure;
 
@@ -20,6 +24,7 @@ class CustomForm extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         labelText: label,
+        hintText: hint,
       ),
     );
   }
