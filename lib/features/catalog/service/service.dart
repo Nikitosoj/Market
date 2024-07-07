@@ -34,3 +34,14 @@ Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
 
   return productList;
 }
+
+Future<bool> productToCart(String userId, int productId) async {
+  try {
+    await supabase
+        .from('Cart')
+        .insert({'product_id': productId, 'user_id': userId});
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

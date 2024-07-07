@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/catalog_body.dart';
+import 'widgets/body.dart';
 
 class CatalogScreen extends StatelessWidget {
   const CatalogScreen({super.key});
@@ -14,7 +14,7 @@ class CatalogScreen extends StatelessWidget {
         scrolledUnderElevation: 0.0,
         title: Text('Каталог'),
       ),
-      body: CatalogBody(),
+      body: Body(),
     );
   }
 }

@@ -3,18 +3,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:style_hub/auth_notifier.dart';
 import 'package:style_hub/features/catalog/presentation/widgets/product_widget.dart';
 
+import '../../../../core/models/product.dart';
 import '../../bloc/catalog_bloc.dart';
 
-class CatalogBody extends StatefulWidget {
-  const CatalogBody({super.key});
+class Body extends StatefulWidget {
+  const Body({super.key});
 
   @override
-  State<CatalogBody> createState() => _CatalogBodyState();
+  State<Body> createState() => _BodyState();
 }
 
-class _CatalogBodyState extends State<CatalogBody> {
+class _BodyState extends State<Body> {
   final _bloc = CatalogBloc();
   final ScrollController _scrollController = ScrollController();
 
@@ -42,6 +45,7 @@ class _CatalogBodyState extends State<CatalogBody> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthNotifier>(context, listen: false).user!;
     return RefreshIndicator(
       onRefresh: () async {
         final completer = Completer();
@@ -52,7 +56,7 @@ class _CatalogBodyState extends State<CatalogBody> {
         bloc: _bloc,
         builder: (context, state) {
           if ((state is CatalogLoaded) || (state is LoadingNextPage)) {
-            final items = (state as dynamic).items;
+            final List<Product> items = (state as dynamic).items;
             return GridView.custom(
               controller: _scrollController,
               padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -64,7 +68,17 @@ class _CatalogBodyState extends State<CatalogBody> {
               ),
               childrenDelegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return ProductWidget(items[index]);
+                  return Column(
+                    children: [
+                      ProductWidget(items[index]),
+                      TextButton(
+                          onPressed: () {
+                            _bloc.add(AddToCartButton(context,
+                                productId: items[index].id, userId: user.id));
+                          },
+                          child: const Text('В корзину')),
+                    ],
+                  );
                 },
                 childCount: items.length,
               ),

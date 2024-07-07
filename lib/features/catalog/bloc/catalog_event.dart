@@ -18,3 +18,15 @@ class AddCatalogItems extends CatalogEvent {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
+
+class AddToCartButton extends CatalogEvent {
+  final int productId;
+  final String userId;
+  final BuildContext context;
+
+  AddToCartButton(this.context,
+      {required this.productId, required this.userId});
+
+  @override
+  List<Object?> get props => [productId, context, userId];
+}
