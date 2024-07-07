@@ -1,5 +1,6 @@
 import 'package:style_hub/core/models/product.dart';
 import 'package:style_hub/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
   // Получаем список продуктов
@@ -37,11 +38,27 @@ Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
 
 Future<bool> productToCart(String userId, int productId) async {
   try {
+    final result = await supabase
+        .from('Cart')
+        .select('quantity')
+        .eq('user_id', userId)
+        .eq('product_id', productId)
+        .single();
+    final int quantity = result['quantity'];
     await supabase
         .from('Cart')
-        .insert({'product_id': productId, 'user_id': userId});
+        .update({'quantity': quantity + 1})
+        .eq('user_id', userId)
+        .eq('product_id', productId);
     return true;
   } catch (e) {
-    return false;
+    if (e is PostgrestException && e.code == 'PGRST116') {
+      await supabase
+          .from('Cart')
+          .insert({'product_id': productId, 'user_id': userId});
+      return true;
+    } else {
+      return false;
+    }
   }
 }
