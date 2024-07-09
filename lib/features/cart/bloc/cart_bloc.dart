@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_hub/features/cart/service/service.dart';
 
 import '../../../core/models/product.dart';
 
@@ -8,11 +9,12 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartInitial()) {
-    on<LoadCart>(getCartData);
+    on<LoadCart>(loadCartFromDb);
   }
-  void getCartData(LoadCart event, Emitter<CartState> emit) async {
+  void loadCartFromDb(LoadCart event, Emitter<CartState> emit) async {
     try {
-      emit(CartLoaded(items: []));
+      final items = await getCartList(event.userId);
+      emit(CartLoaded(items: items));
     } catch (e) {
       emit(CartLoadingFailure(error: e.toString()));
     }

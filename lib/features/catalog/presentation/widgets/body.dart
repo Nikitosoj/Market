@@ -18,12 +18,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final _bloc = CatalogBloc();
+  late final CatalogBloc _bloc;
+  // final _bloc = CatalogBloc();
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _bloc = BlocProvider.of<CatalogBloc>(context);
     _bloc.add(LoadCatalog());
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=

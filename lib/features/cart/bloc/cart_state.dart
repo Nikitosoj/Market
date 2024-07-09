@@ -17,7 +17,7 @@ class CartLoaded extends CartState {
 
   CartLoaded({required this.items});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [items];
 }
 
 class CartLoadingFailure extends CartState {

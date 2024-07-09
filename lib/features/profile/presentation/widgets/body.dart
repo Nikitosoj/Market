@@ -14,7 +14,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final _bloc = ProfileBloc();
+  // final _bloc = ProfileBloc();
+  late final ProfileBloc _bloc;
+  @override
+  void initState() {
+    super.initState();
+    _bloc = BlocProvider.of<ProfileBloc>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthNotifier>(context, listen: false).user!;

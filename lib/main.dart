@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
+import 'package:style_hub/features/catalog/bloc/catalog_bloc.dart';
+import 'package:style_hub/features/profile/bloc/profile_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'auth_notifier.dart';
 import 'features/root/app_routing.dart';
@@ -26,9 +30,16 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            routerConfig: router,
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => CatalogBloc()),
+              BlocProvider(create: (context) => CartBloc()),
+              BlocProvider(create: (context) => ProfileBloc()),
+            ],
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              routerConfig: router,
+            ),
           );
         });
   }

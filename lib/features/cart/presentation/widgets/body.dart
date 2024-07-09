@@ -16,15 +16,19 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  void startBloc(User user) {
-    _bloc.add(LoadCart(userId: user.id));
+  @override
+  void initState() {
+    super.initState();
+    _bloc = BlocProvider.of<CartBloc>(context);
+    _user = Provider.of<AuthNotifier>(context, listen: false).user!;
+    _bloc.add(LoadCart(userId: _user.id));
   }
 
-  final _bloc = CartBloc();
+  // final _bloc = CartBloc();
+  late final CartBloc _bloc;
+  late final User _user;
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthNotifier>(context, listen: false).user!;
-    startBloc(user);
     return BlocBuilder(
         bloc: _bloc,
         builder: (context, state) {
@@ -56,7 +60,7 @@ class _BodyState extends State<Body> {
                   Text(state.error),
                   TextButton(
                     onPressed: () {
-                      _bloc.add(LoadCart(userId: user.id));
+                      _bloc.add(LoadCart(userId: _user.id));
                     },
                     child: const Text('Reload'),
                   ),
