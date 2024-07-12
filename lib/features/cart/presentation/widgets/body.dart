@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/core/models/user.dart';
 import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
+import 'package:style_hub/features/cart/presentation/widgets/cart_product.dart';
+import 'package:style_hub/features/cart/presentation/widgets/footer_widget.dart';
 import 'package:style_hub/features/catalog/presentation/widgets/product_widget.dart';
 
 import '../../../../auth_notifier.dart';
@@ -39,16 +41,31 @@ class _BodyState extends State<Body> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 630.h,
+                    height: 650.h,
                     child: ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (context, index) {
-                          return ProductWidget(
-                            items[index],
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 20.h),
+                            child: CartProduct(
+                              items[index],
+                            ),
                           );
                         }),
                   ),
-                  TextButton(onPressed: () {}, child: const Text('Buy all'))
+                  (items.isNotEmpty)
+                      ? InkWell(
+                          onTap: () {
+                            // buy all items
+                          },
+                          child: FooterWidget(
+                            amount: items.length,
+                            totalPrice: items
+                                .map((product) => product.price)
+                                .reduce((a, b) => a + b),
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             );
