@@ -7,7 +7,6 @@ Future<List<Product>> getCartList(String userId) async {
   List<Map<String, dynamic>> result = [];
   final items =
       await supabase.from('Cart').select('product_id').eq('user_id', userId);
-  List<String> productIds = [];
   for (final item in items) {
     final res = await supabase
         .from('Product')
@@ -18,4 +17,18 @@ Future<List<Product>> getCartList(String userId) async {
   }
   final productList = await getProductListFromId(result);
   return productList;
+}
+
+Future<bool> removeItem(String userId, int productId) async {
+  try {
+    await supabase
+        .from('Cart')
+        .delete()
+        .eq('product_id', productId)
+        .eq('user_id', userId);
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
 }
