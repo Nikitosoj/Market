@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/core/models/user.dart';
 import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
@@ -55,7 +56,7 @@ class _BodyState extends State<Body> {
                 (items.isNotEmpty)
                     ? InkWell(
                         onTap: () {
-                          // buy all items
+                          context.go('/payment', extra: items);
                         },
                         child: FooterWidget(
                           amount: items.length,

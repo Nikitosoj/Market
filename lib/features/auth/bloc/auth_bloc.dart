@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (user != null) {
       Provider.of<AuthNotifier>(context, listen: false)
           .login(isSeller: user.seller, user: user);
+      // хранить сессию
       context.go('/catalog');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

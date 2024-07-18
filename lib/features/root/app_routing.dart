@@ -3,11 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:style_hub/features/auth/presentation/auth_screen.dart';
 import 'package:style_hub/features/cart/presentation/cart_screen.dart';
 import 'package:style_hub/features/chats/presentation/chats_screen.dart';
+import 'package:style_hub/features/payment/presentation/payment_screen.dart';
 import 'package:style_hub/features/phone/presentation/phone_screen.dart';
 import 'package:style_hub/features/profile/presentation/profile_screen.dart';
 import 'package:style_hub/features/sing_up/presentation/sign_up_screen.dart';
 
 import '../../auth_notifier.dart';
+import '../../core/models/product.dart';
 import '../add_product/presentation/add_product_screen.dart';
 import '../catalog/presentation/catalog_screen.dart';
 import '../chat_detail/presentation/chat_detail_screen.dart';
@@ -38,6 +40,13 @@ final router = GoRouter(
           final phone = state.extra as String;
           return SignUpScreen(phone: phone);
         }),
+    GoRoute(
+      path: '/payment',
+      builder: (context, state) {
+        final productList = state.extra as List<Product>;
+        return PaymentScreen(productList: productList);
+      },
+    ),
     GoRoute(
       path: '/phone',
       builder: (context, state) => const PhoneScreen(),

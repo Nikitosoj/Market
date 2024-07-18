@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
 import 'package:style_hub/features/catalog/bloc/catalog_bloc.dart';
+import 'package:style_hub/features/payment/bloc/payment_bloc.dart';
 import 'package:style_hub/features/profile/bloc/profile_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'auth_notifier.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => CatalogBloc()),
               BlocProvider(create: (context) => CartBloc()),
               BlocProvider(create: (context) => ProfileBloc()),
+              BlocProvider(create: (context) => PaymentBloc()),
             ],
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
