@@ -41,13 +41,6 @@ final router = GoRouter(
           return SignUpScreen(phone: phone);
         }),
     GoRoute(
-      path: '/payment',
-      builder: (context, state) {
-        final productList = state.extra as List<CartProductModel>;
-        return PaymentScreen(productList: productList);
-      },
-    ),
-    GoRoute(
       path: '/phone',
       builder: (context, state) => const PhoneScreen(),
     ),
@@ -85,9 +78,17 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/cart',
-              builder: (context, state) => const CartScreen(),
-            ),
+                path: '/cart',
+                builder: (context, state) => const CartScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'payment',
+                    builder: (context, state) {
+                      final productList = state.extra as List<CartProductModel>;
+                      return PaymentScreen(productList: productList);
+                    },
+                  ),
+                ]),
           ],
         ),
         StatefulShellBranch(

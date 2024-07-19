@@ -56,7 +56,7 @@ class _BodyState extends State<Body> {
                 (items.isNotEmpty)
                     ? InkWell(
                         onTap: () {
-                          context.go('/payment', extra: items);
+                          context.push('/cart/payment', extra: items);
                         },
                         child: FooterWidget(
                           amount: items.length,

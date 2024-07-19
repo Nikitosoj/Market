@@ -9,7 +9,9 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Оплата')),
+      appBar: AppBar(
+        title: const Text('Оплата'),
+      ),
       body: Body(cartProductList: productList),
     );
   }
