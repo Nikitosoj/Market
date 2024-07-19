@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:style_hub/core/models/cart_product.dart';
 import 'package:style_hub/features/auth/presentation/auth_screen.dart';
 import 'package:style_hub/features/cart/presentation/cart_screen.dart';
 import 'package:style_hub/features/chats/presentation/chats_screen.dart';
@@ -9,7 +10,6 @@ import 'package:style_hub/features/profile/presentation/profile_screen.dart';
 import 'package:style_hub/features/sing_up/presentation/sign_up_screen.dart';
 
 import '../../auth_notifier.dart';
-import '../../core/models/product.dart';
 import '../add_product/presentation/add_product_screen.dart';
 import '../catalog/presentation/catalog_screen.dart';
 import '../chat_detail/presentation/chat_detail_screen.dart';
@@ -43,7 +43,7 @@ final router = GoRouter(
     GoRoute(
       path: '/payment',
       builder: (context, state) {
-        final productList = state.extra as List<Product>;
+        final productList = state.extra as List<CartProductModel>;
         return PaymentScreen(productList: productList);
       },
     ),

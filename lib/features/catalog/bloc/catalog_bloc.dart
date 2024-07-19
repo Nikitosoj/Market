@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
 
 import 'package:style_hub/features/catalog/service/service.dart';
@@ -57,8 +58,18 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
   void addToCart(AddToCartButton event, Emitter<CatalogState> emit) async {
     final context = event.context;
+    if (event.product.sizes.length > 1) {
+      showBottom(context, event);
+    } else {
+      await tryAddToCart(event, context, 'Standard');
+    }
+  }
+
+  Future<void> tryAddToCart(
+      AddToCartButton event, BuildContext context, String sizeName) async {
     try {
-      final result = await productToCart(event.userId, event.productId);
+      final result =
+          await insertProductToCart(event.userId, event.product.id, sizeName);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Successful add to cart '),
@@ -74,5 +85,46 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
         content: Text(e.toString()),
       ));
     }
+  }
+
+  Future<dynamic> showBottom(BuildContext context, AddToCartButton event) {
+    return showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Colors.transparent,
+            child: Wrap(children: [
+              ...event.product.sizes.map((size) {
+                return GestureDetector(
+                  onTap: () async {
+                    await tryAddToCart(event, context, size);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 140.h,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.blueGrey[50],
+                    ),
+                    child: Center(
+                      child: Text(
+                        size,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ]),
+          );
+        });
   }
 }

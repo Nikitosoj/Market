@@ -13,7 +13,7 @@ class CartLoading extends CartState {
 }
 
 class CartLoaded extends CartState {
-  final List<Product> items;
+  final List<CartProductModel> items;
 
   CartLoaded({required this.items});
   @override

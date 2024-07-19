@@ -76,7 +76,7 @@ class _BodyState extends State<Body> {
                       TextButton(
                           onPressed: () {
                             _bloc.add(AddToCartButton(context,
-                                productId: items[index].id, userId: user.id));
+                                product: items[index], userId: user.id));
                           },
                           child: const Text('В корзину')),
                     ],

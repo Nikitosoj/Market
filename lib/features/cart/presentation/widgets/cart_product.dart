@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:style_hub/core/models/product.dart';
+import 'package:style_hub/core/models/cart_product.dart';
 
 import '../../../../core/models/user.dart';
 import '../../bloc/cart_bloc.dart';
 
 class CartProduct extends StatelessWidget {
   const CartProduct({required this.item, required this.user, super.key});
-  final Product item;
+  final CartProductModel item;
   final String storage = 'Crimea';
   final User user;
 
@@ -24,7 +24,7 @@ class CartProduct extends StatelessWidget {
                 BlocProvider.of<CartBloc>(context).add(DeleteItemFromCart(
                   context: context,
                   userId: user.id,
-                  productId: item.id,
+                  productId: item.product.id,
                 ));
               },
               backgroundColor: const Color(0xFFFE4A49),
@@ -63,10 +63,11 @@ class CartProduct extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.name,
+                          Text(item.product.name,
                               overflow: TextOverflow.ellipsis, maxLines: 3),
-                          Text('Артикул: ${item.id.toString()}'),
+                          Text('Артикул: ${item.product.id.toString()}'),
                           Text('Склад: $storage'),
+                          Text('Размер: ${item.sizeSelected}'),
                           // SizedBox(
                           //   height: 40.h,
                           //   child: ListView.builder(
@@ -99,9 +100,9 @@ class CartProduct extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Цена со скидкой: ${item.price}',
+                          'Цена со скидкой: ${item.product.price}',
                         ),
-                        Text('${item.price} р')
+                        Text('${item.product.price} р')
                       ])),
                   TextButton(
                     onPressed: () {},

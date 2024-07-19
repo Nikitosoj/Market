@@ -12,7 +12,8 @@ Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
   return productList;
 }
 
-Future<bool> productToCart(String userId, int productId) async {
+Future<bool> insertProductToCart(
+    String userId, int productId, String sizeName) async {
   try {
     final result = await supabase
         .from('Cart')
@@ -29,9 +30,8 @@ Future<bool> productToCart(String userId, int productId) async {
     return true;
   } catch (e) {
     if (e is PostgrestException && e.code == 'PGRST116') {
-      await supabase
-          .from('Cart')
-          .insert({'product_id': productId, 'user_id': userId});
+      await supabase.from('Cart').insert(
+          {'product_id': productId, 'user_id': userId, 'size_name': sizeName});
       return true;
     } else {
       return false;

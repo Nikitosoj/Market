@@ -20,13 +20,12 @@ class AddCatalogItems extends CatalogEvent {
 }
 
 class AddToCartButton extends CatalogEvent {
-  final int productId;
+  final Product product;
   final String userId;
   final BuildContext context;
 
-  AddToCartButton(this.context,
-      {required this.productId, required this.userId});
+  AddToCartButton(this.context, {required this.product, required this.userId});
 
   @override
-  List<Object?> get props => [productId, context, userId];
+  List<Object?> get props => [product, context, userId];
 }

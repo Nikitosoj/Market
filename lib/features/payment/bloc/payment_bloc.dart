@@ -2,8 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:style_hub/core/models/cart_product.dart';
 
-import '../../../core/models/product.dart';
+import '../../../core/models/user.dart';
 import '../service/payment_service.dart';
 
 part 'payment_event.dart';
@@ -14,9 +15,16 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<PaymentStart>(addPayment);
   }
   void addPayment(PaymentStart event, Emitter<PaymentState> state) async {
+    final user = event.user;
+    final productList =
+        event.cartProductList.map((item) => item.product).toList();
+    final newTotalbuy = event.totalPrice + (user.totalBuy ?? 0);
     final result =
-        await insertPayment(event.userId, event.totalPrice, event.productList);
+        await buyProductList(user.id, event.totalPrice, event.cartProductList);
+
+    await clearUserCart(user.id, productList);
     if (result == null) {
+      await user.update(totalBuy: newTotalbuy);
       event.context.go('/catalog');
     } else {
       event.context.go('/error', extra: result);

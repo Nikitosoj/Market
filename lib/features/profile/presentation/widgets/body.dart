@@ -25,7 +25,6 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthNotifier>(context, listen: false).user!;
-    double totalBuy = user.totalBuy ?? 0;
     return SafeArea(
       child: BlocProvider(
         create: (_) => ProfileBloc(),
@@ -54,7 +53,7 @@ class _BodyState extends State<Body> {
                           )),
                     ],
                   ),
-                  Text(totalBuy.toString()),
+                  Text('${user.totalBuy ?? 0}'),
                   Text('email : ${user.email}'),
                   Text('phone : ${user.phone}')
                 ],

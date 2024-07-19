@@ -61,7 +61,7 @@ class _BodyState extends State<Body> {
                         child: FooterWidget(
                           amount: items.length,
                           totalPrice: items
-                              .map((product) => product.price)
+                              .map((model) => model.product.price)
                               .reduce((a, b) => a + b),
                         ),
                       )

@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:style_hub/core/models/cart_product.dart';
 import 'package:style_hub/features/cart/service/service.dart';
-
-import '../../../core/models/product.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -34,7 +33,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         ));
       }
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
         content: Text(e.toString()),
       ));

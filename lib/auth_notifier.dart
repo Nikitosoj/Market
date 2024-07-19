@@ -18,6 +18,11 @@ class AuthNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateUser({required User user}) {
+    _user = user;
+    notifyListeners();
+  }
+
   void logout() {
     _user = null;
     _isAuthenticated = false;

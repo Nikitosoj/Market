@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/auth_notifier.dart';
-import 'package:style_hub/core/models/user.dart';
 import 'package:style_hub/features/payment/bloc/payment_bloc.dart';
 
+import '../../../../core/models/cart_product.dart';
 import '../../../../core/models/product.dart';
 
 class Body extends StatefulWidget {
-  const Body({super.key, required this.productList});
-  final List<Product> productList;
+  const Body({super.key, required this.cartProductList});
+  final List<CartProductModel> cartProductList;
 
   @override
   State<Body> createState() => _BodyState();
@@ -18,21 +18,24 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   late final PaymentBloc _bloc;
-  late final List<Product> _productList;
+  late final List<CartProductModel> _cartProductList;
   late final int _totalPrice;
+  late List<Product> _productList;
   @override
   void initState() {
-    _productList = widget.productList;
+    _cartProductList = widget.cartProductList;
     _bloc = BlocProvider.of<PaymentBloc>(context);
-
-    _totalPrice =
-        _productList.map((product) => product.price).reduce((a, b) => a + b);
+    _productList = [];
+    _cartProductList.map((item) => _productList.add(item.product));
+    _totalPrice = _cartProductList
+        .map((item) => item.product.price)
+        .reduce((a, b) => a + b);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final _user = Provider.of<AuthNotifier>(context).user!;
+    final user = Provider.of<AuthNotifier>(context).user!;
     return BlocBuilder(
         bloc: _bloc,
         builder: (context, state) {
@@ -43,10 +46,22 @@ class _BodyState extends State<Body> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Кол-во товаров: '),
+                      Text(_productList.length.toString())
+                    ],
+                  ),
                   Row(),
                   Row(),
-                  Row(),
-                  Row(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Общая цена: '),
+                      Text(_totalPrice.toString())
+                    ],
+                  ),
                   Container(
                     height: 150.h,
                     child: ListView.builder(
@@ -62,8 +77,8 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     _bloc.add(PaymentStart(context,
                         totalPrice: _totalPrice,
-                        productList: _productList,
-                        userId: _user.id));
+                        cartProductList: _cartProductList,
+                        user: user));
                   },
                   child: Text('Купить'))
             ],

@@ -6,14 +6,14 @@ class User {
   late String email;
   late String phone;
   String? name;
-  double? totalBuy;
+  int? totalBuy;
 
   User setPhone(String phone) {
     this.phone = phone;
     return this;
   }
 
-  User setTotalBuy(double totalBuy) {
+  User setTotalBuy(int totalBuy) {
     this.totalBuy = totalBuy;
     return this;
   }
@@ -29,11 +29,12 @@ class User {
   }
 
   Future<User> update(
-      {String? phone, String? email, String? name, double? totalBuy}) async {
+      {String? phone, String? email, String? name, int? totalBuy}) async {
     await supabase.from('Users').update({
       'email': email ?? this.email,
       'phone': phone ?? this.phone,
       'name': name ?? this.name,
+      'total_buy': totalBuy ?? this.totalBuy,
     }).eq('phone', this.phone);
     Map<String, dynamic> user =
         await supabase.from('Users').select().eq('phone', this.phone).single();
@@ -53,7 +54,7 @@ class User {
     phone = user['phone'] ?? phone;
     email = user['email'] ?? email;
     name = user['name'] ?? name;
-    totalBuy = user['totalBuy'] ?? totalBuy;
+    totalBuy = user['total_buy'] ?? totalBuy;
     if (first) {
       id = user['id'] ?? id;
       seller = user['seller'] ?? seller;
