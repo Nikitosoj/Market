@@ -49,9 +49,31 @@ class _BodyState extends State<Body> {
                           scrollDirection: Axis.horizontal,
                           itemCount: state.comments.length,
                           itemBuilder: (context, index) {
+                            final comment = state.comments[index];
                             return Container(
-                              width: 50,
-                              color: Colors.red,
+                              padding: EdgeInsets.all(8),
+                              width: 200.w,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      comment.comment,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 4,
+                                    ),
+                                  ),
+                                  Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Text(
+                                        comment.userName,
+                                        style: TextStyle(color: Colors.red),
+                                      ))
+                                ],
+                              ),
                             );
                           })),
                   (state.canComment) ? Text('Can comment') : Container(),

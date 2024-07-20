@@ -1,8 +1,8 @@
 class CommentModel {
-  final String userId;
+  final String userName;
   final double stars;
   final String comment;
 
   CommentModel(
-      {required this.userId, required this.stars, required this.comment});
+      {required this.userName, required this.stars, required this.comment});
 }

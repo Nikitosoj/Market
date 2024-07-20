@@ -10,10 +10,20 @@ Future<List<CommentModel>> getComments(int productId) async {
       .eq('product_id', productId)
       .range(0, 5);
   for (final item in result) {
-    finalList.add(CommentModel(
-        userId: item['user_id'],
-        stars: (item['stars'] as int).toDouble(),
-        comment: item['comment']));
+    try {
+      final name = await supabase
+          .from('Users')
+          .select('name')
+          .eq('id', item['user_id'])
+          .single();
+      finalList.add(CommentModel(
+          userName: name['name'] ?? 'anon',
+          stars: (item['stars'] as int).toDouble(),
+          comment: item['comment']));
+      print(name);
+    } catch (e) {
+      print(e);
+    }
   }
   return finalList;
 }
