@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/auth_notifier.dart';
 import 'package:style_hub/features/catalog/presentation/widgets/product_widget.dart';
@@ -72,7 +73,12 @@ class _BodyState extends State<Body> {
                 (BuildContext context, int index) {
                   return Column(
                     children: [
-                      ProductWidget(items[index]),
+                      GestureDetector(
+                          onTap: () {
+                            context.push('/catalog/product',
+                                extra: items[index]);
+                          },
+                          child: ProductWidget(items[index])),
                       TextButton(
                           onPressed: () {
                             _bloc.add(AddToCartButton(context,

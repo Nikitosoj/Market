@@ -17,7 +17,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<LoadCatalog>(getCatalog);
     on<AddCatalogItems>(addItems);
-    on<AddToCartButton>(addToCart);
+    on<AddToCartButton>(addToCartButtonPressed);
   }
   void getCatalog(LoadCatalog event, Emitter<CatalogState> emit) async {
     try {
@@ -56,12 +56,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     }
   }
 
-  void addToCart(AddToCartButton event, Emitter<CatalogState> emit) async {
+  void addToCartButtonPressed(AddToCartButton event, Emitter<CatalogState> emit) async {
     final context = event.context;
     if (event.product.sizes.length > 1) {
       showBottom(context, event);
     } else {
-      await tryAddToCart(event, context, 'Standard');
+      await tryAddToCart(event, context, 'Standard'); // dobavit enum
     }
   }
 
@@ -69,7 +69,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       AddToCartButton event, BuildContext context, String sizeName) async {
     try {
       final result =
-          await insertProductToCart(event.userId, event.product.id, sizeName);
+          await saveToDbInCart(event.userId, event.product.id, sizeName);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Successful add to cart '),

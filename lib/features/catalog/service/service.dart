@@ -12,7 +12,7 @@ Future<List<Product>> getCatalogList(int startIndex, int endIndex) async {
   return productList;
 }
 
-Future<bool> insertProductToCart(
+Future<bool> saveToDbInCart(
     String userId, int productId, String sizeName) async {
   try {
     final result = await supabase

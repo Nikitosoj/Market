@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:style_hub/core/models/cart_product.dart';
+import 'package:style_hub/core/models/product.dart';
 import 'package:style_hub/features/auth/presentation/auth_screen.dart';
 import 'package:style_hub/features/cart/presentation/cart_screen.dart';
 import 'package:style_hub/features/chats/presentation/chats_screen.dart';
@@ -13,6 +14,7 @@ import '../../auth_notifier.dart';
 import '../add_product/presentation/add_product_screen.dart';
 import '../catalog/presentation/catalog_screen.dart';
 import '../chat_detail/presentation/chat_detail_screen.dart';
+import '../comment/presentation/comment_screen.dart';
 import '../error/presentation/error_screen.dart';
 import '../product/presentation/product_screen.dart';
 import 'presentation/root_screen.dart';
@@ -57,7 +59,19 @@ final router = GoRouter(
                 routes: [
                   GoRoute(
                     path: 'product',
-                    builder: (context, state) => const ProductScreen(),
+                    builder: (context, state) {
+                      final product = state.extra as Product;
+                      return ProductScreen(product: product);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'comments',
+                        builder: (context, state) {
+                          final product = state.extra as Product;
+                          return CommentScreen(product.id);
+                        },
+                      )
+                    ],
                   ),
                 ]),
           ],

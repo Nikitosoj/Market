@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:style_hub/core/models/cart_product.dart';
+import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
 
 import '../../../core/models/user.dart';
 import '../service/payment_service.dart';
@@ -25,7 +26,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     await clearUserCart(user.id, productList);
     if (result == null) {
       await user.update(totalBuy: newTotalbuy);
-      event.context.go('/catalog');
+      BlocProvider.of<CartBloc>(event.context)
+          .add(LoadCart(userId: event.user.id));
+      event.context.pop();
     } else {
       event.context.go('/error', extra: result);
     }
