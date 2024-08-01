@@ -10,9 +10,7 @@ import '../../bloc/auth_bloc.dart';
 class Body extends StatefulWidget {
   const Body({
     super.key,
-    required this.phone,
   });
-  final String phone;
 
   @override
   State<Body> createState() => _BodyState();
@@ -26,7 +24,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     _emailController = TextEditingController(text: 'ssss@gmail.com');
-    _passwordController = TextEditingController(text: 'aaaaa');
+    _passwordController = TextEditingController(text: 'aaaaaa');
     super.initState();
   }
 

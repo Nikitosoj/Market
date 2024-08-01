@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class CommentScreen extends StatelessWidget {
   const CommentScreen(this.productId, {super.key});
-  final int productId;
+  final String productId;
 
   @override
   Widget build(BuildContext context) {

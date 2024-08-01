@@ -11,7 +11,7 @@ class AddToCartButtonPressed extends ProductEvent {
 }
 
 class LoadProduct extends ProductEvent {
-  final int productId;
+  final String productId;
   final String userId;
 
   LoadProduct({required this.productId, required this.userId});

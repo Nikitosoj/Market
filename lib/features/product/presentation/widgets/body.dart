@@ -33,6 +33,7 @@ class _BodyState extends State<Body> {
         bloc: _bloc,
         builder: (context, state) {
           if (state is ProductLoaded) {
+            print(state.canComment);
             return Expanded(
               child: ListView(
                 scrollDirection: Axis.vertical,

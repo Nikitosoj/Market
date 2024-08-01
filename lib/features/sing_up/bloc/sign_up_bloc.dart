@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../auth_notifier.dart';
-import '../../../core/models/user.dart';
+import '../../../main.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
@@ -20,26 +21,26 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     SignUpButtonPressed event,
     Emitter<SignUpState> emit,
   ) async {
-    emit(SignUpLoading());
+    final BuildContext context = event.context;
     try {
-      final BuildContext context = event.context;
-      final User? user = await User()
-          .create(event.email, event.password, event.phone, event.seller);
-      if (user != null) {
-        Provider.of<AuthNotifier>(context, listen: false)
-            .login(isSeller: user.seller, user: user);
-        context.go('/catalog');
-        emit(SignUpSuccess());
-      } else {
-        emit(const SignUpFailure(error: 'User creation failed.'));
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Something went wrong'),
-        ));
+      final phone = event.phone;
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: event.email, password: event.password);
+      if (userCredential.user != null) {
+        final user = await firebase.createUserData(
+            userCredential.user!.uid, event.email, phone, event.seller);
+        if (user != null) {
+          Provider.of<AuthNotifier>(context, listen: false)
+              .login(isSeller: user.seller, user: user);
+          context.go('/catalog');
+          emit(SignUpSuccess());
+        }
       }
-    } catch (error) {
-      emit(SignUpFailure(error: error.toString()));
+    } catch (e) {
+      emit(SignUpFailure(error: e.toString()));
       ScaffoldMessenger.of(event.context).showSnackBar(SnackBar(
-        content: Text('Something went wrong: ${error.toString()}'),
+        content: Text('Something went wrong: ${e.toString()}'),
       ));
     }
   }

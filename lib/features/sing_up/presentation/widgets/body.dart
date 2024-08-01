@@ -49,27 +49,32 @@ class _BodyState extends State<Body> {
     ));
   }
 
-  void _register(BuildContext context, bool isButtonEnabled) {
-    if (isButtonEnabled) {
-      final signUpBloc = BlocProvider.of<SignUpBloc>(context);
-      signUpBloc.add(SignUpButtonPressed(
-        context,
-        email: _emailController.text,
-        phone: _phoneController.text,
-        password: _passwordController.text,
-        seller: isSeller,
-      ));
-    }
+  void _register(BuildContext context) {
+    final signUpBloc = BlocProvider.of<SignUpBloc>(context);
+    signUpBloc.add(SignUpButtonPressed(
+      context,
+      email: _emailController.text,
+      password: _passwordController.text,
+      phone: _phoneController.text,
+      seller: isSeller,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      builder: (context, state) {
-        bool isButtonEnabled = false;
-        if (state is InputValidationState) {
-          isButtonEnabled = state.isButtonEnabled;
+    return BlocConsumer<SignUpBloc, SignUpState>(
+      listener: (context, state) {
+        if (state is SignUpFailure) {
+          // Отображение ошибки
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error)),
+          );
         }
+      },
+      builder: (context, state) {
+        final isButtonEnabled =
+            state is InputValidationState && state.isButtonEnabled;
+
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
@@ -79,10 +84,11 @@ class _BodyState extends State<Body> {
               Text('Create your account!', style: TextStyles.title),
               SizedBox(height: 50.h),
               InputForms(
-                  phoneController: _phoneController,
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  confirmPasswordController: _confirmPasswordController),
+                phoneController: _phoneController,
+                emailController: _emailController,
+                passwordController: _passwordController,
+                confirmPasswordController: _confirmPasswordController,
+              ),
               SizedBox(height: 20.h),
               ChoiceChip(
                 label: const Text('Продавец'),
@@ -95,7 +101,7 @@ class _BodyState extends State<Body> {
               ),
               Center(
                 child: TextButton(
-                  onPressed: () => _register(context, isButtonEnabled),
+                  onPressed: isButtonEnabled ? () => _register(context) : null,
                   child: const Text('Register', style: TextStyle(fontSize: 24)),
                 ),
               ),

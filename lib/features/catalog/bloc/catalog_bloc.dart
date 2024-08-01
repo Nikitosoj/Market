@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
 
-import 'package:style_hub/features/catalog/service/service.dart';
-
 import '../../../core/models/product.dart';
+import '../../../main.dart';
 
 part 'catalog_event.dart';
 part 'catalog_state.dart';
@@ -16,7 +15,7 @@ part 'catalog_state.dart';
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<LoadCatalog>(getCatalog);
-    on<AddCatalogItems>(addItems);
+    // on<AddCatalogItems>(addItems);
     on<AddToCartButton>(addToCartButtonPressed);
   }
   void getCatalog(LoadCatalog event, Emitter<CatalogState> emit) async {
@@ -24,8 +23,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       if (state is! CatalogLoaded) {
         emit(CatalogLoading());
       }
-      final items =
-          await getCatalogList(0, 19).timeout(const Duration(seconds: 5));
+      final items = await firebase.getProductList();
       items.sort((a, b) => b.rating.compareTo(a.rating));
       emit(CatalogLoaded(items: items));
     } on TimeoutException {
@@ -39,24 +37,25 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
 // объединить это красиво
-  void addItems(AddCatalogItems event, Emitter<CatalogState> emit) async {
-    if (state is CatalogLoaded) {
-      final currentState = state as CatalogLoaded;
-      final currentItems = List<Product>.from(currentState.items);
-      emit(LoadingNextPage(items: currentItems));
-      try {
-        final newItems = await getCatalogList(event.startIndex, event.endIndex)
-            .timeout(const Duration(seconds: 5));
-        newItems.sort((a, b) => b.rating.compareTo(a.rating));
-        final updatedItems = currentItems + newItems;
-        emit(CatalogLoaded(items: updatedItems));
-      } catch (e) {
-        emit(CatalogLoadingFailure(e.toString()));
-      }
-    }
-  }
+  // void addItems(AddCatalogItems event, Emitter<CatalogState> emit) async {
+  //   if (state is CatalogLoaded) {
+  //     final currentState = state as CatalogLoaded;
+  //     final currentItems = List<Product>.from(currentState.items);
+  //     emit(LoadingNextPage(items: currentItems));
+  //     try {
+  //       final newItems = await getCatalogList(event.startIndex, event.endIndex)
+  //           .timeout(const Duration(seconds: 5));
+  //       newItems.sort((a, b) => b.rating.compareTo(a.rating));
+  //       final updatedItems = currentItems + newItems;
+  //       emit(CatalogLoaded(items: updatedItems));
+  //     } catch (e) {
+  //       emit(CatalogLoadingFailure(e.toString()));
+  //     }
+  //   }
+  // }
 
-  void addToCartButtonPressed(AddToCartButton event, Emitter<CatalogState> emit) async {
+  void addToCartButtonPressed(
+      AddToCartButton event, Emitter<CatalogState> emit) async {
     final context = event.context;
     if (event.product.sizes.length > 1) {
       showBottom(context, event);
@@ -68,8 +67,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   Future<void> tryAddToCart(
       AddToCartButton event, BuildContext context, String sizeName) async {
     try {
-      final result =
-          await saveToDbInCart(event.userId, event.product.id, sizeName);
+      final result = await firebase.addProductToCart(
+          event.product, event.userId, sizeName);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Successful add to cart '),

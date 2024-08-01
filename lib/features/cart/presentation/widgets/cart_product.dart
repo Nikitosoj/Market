@@ -24,7 +24,7 @@ class CartProduct extends StatelessWidget {
                 BlocProvider.of<CartBloc>(context).add(DeleteItemFromCart(
                   context: context,
                   userId: user.id,
-                  productId: item.product.id,
+                  cartProductId: item.id,
                 ));
               },
               backgroundColor: const Color(0xFFFE4A49),

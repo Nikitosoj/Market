@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'widgets/body.dart';
 
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key, required this.phone});
-  final String phone;
+  const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Body(phone: phone),
+      body: Body(),
     );
   }
 }

@@ -28,16 +28,16 @@ class _BodyState extends State<Body> {
     super.initState();
     _bloc = BlocProvider.of<CatalogBloc>(context);
     _bloc.add(LoadCatalog());
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 600) {
-        final state = _bloc.state;
-        if (state is CatalogLoaded) {
-          final currentItemCount = state.items.length;
-          _bloc.add(AddCatalogItems(currentItemCount, currentItemCount + 19));
-        }
-      }
-    });
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels >=
+    //       _scrollController.position.maxScrollExtent - 600) {
+    //     final state = _bloc.state;
+    //     if (state is CatalogLoaded) {
+    //       final currentItemCount = state.items.length;
+    //       _bloc.add(AddCatalogItems(currentItemCount, currentItemCount + 19));
+    //     }
+    //   }
+    // });
   }
 
   @override

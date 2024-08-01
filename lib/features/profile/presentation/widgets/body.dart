@@ -14,7 +14,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  // final _bloc = ProfileBloc();
   late final ProfileBloc _bloc;
   @override
   void initState() {
@@ -41,7 +40,7 @@ class _BodyState extends State<Body> {
                 children: [
                   Row(
                     children: [
-                      Text(user.name ?? 'nickname'),
+                      Text(user.name),
                       IconButton(
                           onPressed: () {
                             _bloc.add(EditButtonPressed(context: context));
@@ -53,7 +52,7 @@ class _BodyState extends State<Body> {
                           )),
                     ],
                   ),
-                  Text('${user.totalBuy ?? 0}'),
+                  Text('${user.totalBuy}'),
                   Text('email : ${user.email}'),
                   Text('phone : ${user.phone}')
                 ],

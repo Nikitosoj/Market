@@ -6,20 +6,23 @@ import 'package:style_hub/features/cart/bloc/cart_bloc.dart';
 import 'package:style_hub/features/catalog/bloc/catalog_bloc.dart';
 import 'package:style_hub/features/payment/bloc/payment_bloc.dart';
 import 'package:style_hub/features/profile/bloc/profile_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'auth_notifier.dart';
+import 'core/models/database_model.dart';
 import 'features/root/app_routing.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  await Supabase.initialize(
-      url: 'https://bejaniqevmgoiiwvefvj.supabase.co',
-      anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlamFuaXFldm1nb2lpd3ZlZnZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyMDA3ODIsImV4cCI6MjAyMjc3Njc4Mn0.rLxF6icLiHyb6CCeCbCm07N0GO7baccZwTpjF6l05Q0');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(ChangeNotifierProvider(
       create: (_) => AuthNotifier(), child: const MyApp()));
 }
 
-final supabase = Supabase.instance.client;
+FirebaseModel firebase = FirebaseModel();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

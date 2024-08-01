@@ -31,10 +31,7 @@ final router = GoRouter(
     GoRoute(
         path: '/auth',
         builder: (context, state) {
-          final phone = state.extra as String;
-          return AuthScreen(
-            phone: phone,
-          );
+          return AuthScreen();
         }),
     GoRoute(
         path: '/signUp',

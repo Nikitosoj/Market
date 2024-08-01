@@ -13,13 +13,13 @@ class LoadCart extends CartEvent {
 class DeleteItemFromCart extends CartEvent {
   final BuildContext context;
   final String userId;
-  final int productId;
+  final String cartProductId;
 
   DeleteItemFromCart({
     required this.context,
     required this.userId,
-    required this.productId,
+    required this.cartProductId,
   });
   @override
-  List<Object?> get props => [userId, productId, context];
+  List<Object?> get props => [userId, cartProductId, context];
 }

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:style_hub/main.dart';
 
 import '../../../auth_notifier.dart';
 
@@ -39,7 +40,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               child: const Text('OK'),
               onPressed: () async {
                 if (textController.text != '') {
-                  await user.update(name: textController.text);
+                  await firebase.updateUserName(user.id, textController.text);
+                  Provider.of<AuthNotifier>(context, listen: false).user!.name =
+                      textController.text;
                   emit(ProfileUpdated());
                 }
                 Navigator.of(context).pop(textController.text);
